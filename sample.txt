@@ -1,0 +1,11 @@
+================================
+      POKÉMON TEAM BUILDER
+================================
+
+1. Search for a Pokémon
+2. Search by weight
+3. View team
+4. Analyze team
+5. Save team
+6. Exit
+
