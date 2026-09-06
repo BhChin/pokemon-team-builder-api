@@ -5,24 +5,12 @@ import math
 from team import PokemonTeam
 from requests.exceptions import HTTPError, ConnectionError, Timeout, JSONDecodeError
 
-
-# import requests
-#
-# POKEMON_LIMIT = 1025
-# URL = 'https://pokeapi.co/api/v2/pokemon'
-# LIMIT_URL = 'https://pokeapi.co/api/v2/pokemon/?limit='
-#
-# response = requests.get(f"{LIMIT_URL}{POKEMON_LIMIT}&id={35}")
-# response2 = requests.get("https://pokeapi.co/api/v2/pokemon/")
-#
-# data = response2.json()
-# print(data)
-#
-# for pokemon in data['results']:
-#     print(pokemon['name'])
+POKEMON_LIMIT = 1025
+POKEMON_URL = 'https://pokeapi.co/api/v2/pokemon/'
 
 
 def run_program():
+    team = None
 
     option_parameters = ['1','2','3','4','5','6']
 
@@ -40,7 +28,14 @@ def run_program():
             data = search_by_name(pokemon)
 
             if data is not None:
-                print_stats(data)
+                stats = get_stats(data)
+                print_stats(stats)
+                answer = input(f"Would you like to add {pokemon} to your team? (y/n): ")
+
+                if answer == 'y':
+                    team = add_to_team(data)
+                    print(f"{pokemon} was added to your team!")
+                    print(f"Team size: {team.size}/6")
 
         elif option == '2':
             pass
@@ -52,18 +47,20 @@ def run_program():
             pass
         elif option == '6':
             sys.exit(0)
+
         print_options()
+        option = input("Select an option: ")
 
 def run_option_1():
     pass
 
 def search_by_name(pokemon_name: str) -> dict | None:
     pokemon_name = pokemon_name.strip().lower()
-    pokemon_url = f"https://pokeapi.co/api/v2/pokemon/{pokemon_name}"
+    final_url = f"{POKEMON_URL}{pokemon_name}"
 
     try:
 
-        response = requests.get(pokemon_url, timeout=10) # good practice to set out a timeout
+        response = requests.get(final_url, timeout=10) # good practice to set out a timeout
 
         if response.status_code == 404:
             print(f"Pokemon {pokemon_name} not found")
@@ -85,21 +82,23 @@ def search_by_name(pokemon_name: str) -> dict | None:
 
 
 
-def print_stats(data: dict) -> None:
+def print_stats(stats: dict) -> None:
+    print(f"Name: {stats["name"]}")
+    print(f"Pokedex ID: {stats["id"]}")
+    print(f"Type: ")
+    print(f"Height: {stats["height"]} ft")
+    print(f"Weight: {stats["weight"]} lbs")
+
+def get_stats(data: dict) -> dict:
     name = data["name"]
     id = data["id"]
-    #types = data["types"]['slot']
-    height = round(data["height"]/3.048, 3) # decimeter -> feet
-    weight = round(data["weight"]/4.536, 3) # hectogram -> pound
+    # types = data["types"]['slot']
+    height = round(data["height"] / 3.048, 3)  # decimeter -> feet
+    weight = round(data["weight"] / 4.536, 3)  # hectogram -> pound
 
-    print(f"Name: {name}")
-    print(f"Pokedex ID: {id}")
-    print(f"Type: ")
-    print(f"Height: {height} ft")
-    print(f"Weight: {weight} lbs")
+    return {"name": name , "id": id, "height": height, "weight": weight }
 
-
-def add_to_team(data: dict, team: PokemonTeam) -> None:
+def add_to_team(data: dict) -> PokemonTeam:
     pass
 
 def search_by_weight():
