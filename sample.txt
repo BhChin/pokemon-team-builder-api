@@ -1,3 +1,7 @@
+program run through
+
+$ python main.py
+
 ================================
       POKÉMON TEAM BUILDER
 ================================
@@ -9,3 +13,150 @@
 5. Save team
 6. Exit
 
+Select an option: 1
+
+Enter a Pokémon name: pikachu
+
+Requesting:
+https://pokeapi.co/api/v2/pokemon/pikachu
+
+Pokémon found!
+
+Name: Pikachu
+Pokédex ID: 25
+Type: Electric
+Height: 0.4 meters
+Weight: 6.0 kilograms
+
+Abilities:
+- Static
+- Lightning Rod
+
+Base stats:
+- HP: 35
+- Attack: 55
+- Defense: 40
+- Special Attack: 50
+- Special Defense: 50
+- Speed: 90
+
+Would you like to add Pikachu to your team? (y/n): y
+
+Pikachu was added to your team!
+Team size: 1/6
+
+---------------------------------
+
+================================
+      POKÉMON TEAM BUILDER
+================================
+
+1. Search for a Pokémon
+2. Search by weight
+3. View team
+4. Analyze team
+5. Save team
+6. Exit
+
+Select an option: 2
+
+Enter a weight in kilograms: 6.0
+
+Searching stored Pokémon data...
+
+Pokémon weighing 6.0 kg:
+
+1. Pikachu
+
+---------------------------------
+
+Select an option: 3
+
+================================
+           YOUR TEAM
+================================
+
+1. Pikachu
+   Type: Electric
+   Weight: 6.0 kg
+
+2. Charizard
+   Types: Fire, Flying
+   Weight: 90.5 kg
+
+3. Blastoise
+   Type: Water
+   Weight: 85.5 kg
+
+4. Venusaur
+   Types: Grass, Poison
+   Weight: 100.0 kg
+
+5. Gengar
+   Types: Ghost, Poison
+   Weight: 40.5 kg
+
+6. Snorlax
+   Type: Normal
+   Weight: 460.0 kg
+
+Team size: 6/6
+
+
+-------------------------------------
+
+Select an option: 4
+
+================================
+         TEAM ANALYSIS
+================================
+
+Shared weaknesses:
+
+- Electric
+  Charizard and Blastoise are weak to Electric.
+
+- Ground
+  Pikachu and Gengar are weak to Ground.
+
+- Psychic
+  Venusaur and Gengar are weak to Psychic.
+
+Your available types:
+
+- Electric
+- Fire
+- Flying
+- Water
+- Grass
+- Poison
+- Ghost
+- Normal
+
+Highest HP:
+Snorlax — 160
+
+Highest Attack:
+Snorlax — 110
+
+Highest Defense:
+Blastoise — 100
+
+Fastest Pokémon:
+Gengar — 110
+
+Warning:
+Your team contains the maximum of six Pokémon.
+Remove a Pokémon before adding another.
+
+
+-------------------------
+
+Select an option: 5
+
+Enter a name for this team: Main Team
+
+Saving team...
+
+Team saved successfully to:
+teams/main-team.json
