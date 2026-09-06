@@ -8,6 +8,16 @@ from pokemon import Pokemon
 class PokemonTeam:
     limit: int = 6
     team: List[Pokemon] = field(default_factory=list) # prevents instances of classes share same list
-    size: int = 0
+
+    @property
+    def size(self) -> int:
+        return len(self.team)
+
+    def add_pokemon(self, pokemon: Pokemon) -> bool:
+        if self.size >= self.limit:
+            return False
+
+        self.team.append(pokemon)
+        return True
 
 

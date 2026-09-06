@@ -2,6 +2,7 @@ import sys
 import requests
 import math
 
+from pokemon import Pokemon
 from team import PokemonTeam
 from requests.exceptions import HTTPError, ConnectionError, Timeout, JSONDecodeError
 
@@ -10,12 +11,11 @@ POKEMON_URL = 'https://pokeapi.co/api/v2/pokemon/'
 
 
 def run_program():
-    team = None
+    team = PokemonTeam(limit = 6)
 
     option_parameters = ['1','2','3','4','5','6']
 
     print_options()
-
     option = input("Select an option: ")
 
     while not option in option_parameters:
@@ -24,19 +24,7 @@ def run_program():
 
     while True:
         if option == '1':
-            pokemon = input("Enter a Pokemon Name: ")
-            data = search_by_name(pokemon)
-
-            if data is not None:
-                stats = get_stats(data)
-                print_stats(stats)
-                answer = input(f"Would you like to add {pokemon} to your team? (y/n): ")
-
-                if answer == 'y':
-                    team = add_to_team(data)
-                    print(f"{pokemon} was added to your team!")
-                    print(f"Team size: {team.size}/6")
-
+            run_option_1(team)
         elif option == '2':
             pass
         elif option == '3':
@@ -51,10 +39,28 @@ def run_program():
         print_options()
         option = input("Select an option: ")
 
-def run_option_1():
-    pass
+def run_option_1(team: PokemonTeam) -> None:
+    pokemon_name = input("Enter a Pokemon Name: ")
+    data = search_by_name(pokemon_name)
+
+    if data is not None:
+        stats = get_stats(data)
+        print_stats(stats)
+        answer = input(f"Would you like to add {pokemon_name} to your team? (y/n): ")
+
+        if answer.strip().lower() == 'y':
+            pokemon = create_pokemon(stats)
+
+            if add_to_team(pokemon, team):
+                print(f"{pokemon.name} was added to your team!")
+                print(f"Team size: {team.size}/{team.limit}")
+            else:
+                print("Your team is already full!")
+
+
 
 def search_by_name(pokemon_name: str) -> dict | None:
+
     pokemon_name = pokemon_name.strip().lower()
     final_url = f"{POKEMON_URL}{pokemon_name}"
 
@@ -98,8 +104,11 @@ def get_stats(data: dict) -> dict:
 
     return {"name": name , "id": id, "height": height, "weight": weight }
 
-def add_to_team(data: dict) -> PokemonTeam:
-    pass
+def create_pokemon(stats: dict) -> Pokemon:
+    return Pokemon(stats["name"], stats["id"], "blank", stats["height"], stats["weight"])
+
+def add_to_team(pokemon: Pokemon, team) -> PokemonTeam:
+    return team.add_pokemon(pokemon)
 
 def search_by_weight():
     pass
@@ -113,3 +122,4 @@ def print_options() -> None:
           "4. Analyze team",
           "5. Save team",
           "6. Exit", sep='\n')
+    print('\n')
