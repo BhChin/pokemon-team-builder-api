@@ -1,10 +1,12 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 @dataclass
 class Pokemon:
     name: str
     id: int
-    type: str
+    types: list[str]
     height: float
     weight: float
-    
+    base_stats: dict[str, int]
+    weaknesses: list[str] = field(default_factory=list)
+
