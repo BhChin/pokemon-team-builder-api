@@ -17,9 +17,9 @@ def run_program():
         if option == '1':
             run_option_1(team)
         elif option == '2':
-            pass
+            run_option_2(team)
         elif option == '3':
-            pass
+            run_option_3(team)
         elif option == '4':
             pass
         elif option == '5':
