@@ -25,21 +25,24 @@ TYPE_WEAKNESSES = {
 
 def run_option_1(team: PokemonTeam) -> None:
     pokemon_name = input("Enter a Pokemon Name: ")
+    print()
     data = search_by_name(pokemon_name)
 
     if data is not None:
         stats = get_stats(data)
         print_stats(stats)
         answer = input(f"Would you like to add {pokemon_name} to your team? (y/n): ")
+        print()
+
 
         if answer.strip().lower() == 'y':
             pokemon = create_pokemon(stats)
 
             if add_to_team(pokemon, team):
-                print(f"{pokemon.name} was added to your team!")
-                print(f"Team size: {team.size}/{team.limit}")
+                print(f"{pokemon.name} was added to your team!", end='\n\n')
+                print(f"Team size: {team.size}/{team.limit}", end='\n\n')
             else:
-                print("Your team is already full!")
+                print("Your team is already full!", end='\n\n')
 
 def run_option_2(team: PokemonTeam) -> None:
     if team.size == 0:
@@ -64,7 +67,7 @@ def run_option_2(team: PokemonTeam) -> None:
         print()
 
     print(f"Team size: {team.size}/{team.limit}")
-    print("\n-------------------------------------")
+    print("\n-------------------------------------", end= '\n\n')
 
 
 def run_option_3(team: PokemonTeam) -> None:
@@ -84,6 +87,8 @@ def run_option_3(team: PokemonTeam) -> None:
         print("\nWarning:")
         print("Your team contains the maximum of six Pokémon.")
         print("Remove a Pokémon before adding another.")
+
+    print("\n-------------------------------------", end='\n\n')
 
 def add_to_team(pokemon: Pokemon, team) -> PokemonTeam:
     return team.add_pokemon(pokemon)
@@ -154,7 +159,8 @@ def print_stats(stats: dict) -> None:
     print(f"Pokedex ID: {stats["id"]}")
     print(f"Type: ")
     print(f"Height: {stats["height"]} ft")
-    print(f"Weight: {stats["weight"]} lbs")
+    print(f"Weight: {stats["weight"]} lbs", end='\n\n')
+
 
 def print_highest_stats(team: PokemonTeam) -> None:
     categories = {
