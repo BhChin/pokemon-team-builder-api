@@ -1,6 +1,7 @@
 from team import PokemonTeam
 from pokemon import Pokemon
 from pokeapi import search_by_name, get_stats
+from database import save_team
 
 TYPE_WEAKNESSES = {
     "normal": ["fighting"],
@@ -89,6 +90,20 @@ def run_option_3(team: PokemonTeam) -> None:
         print("Remove a Pokémon before adding another.")
 
     print("\n-------------------------------------", end='\n\n')
+
+def run_option_4(team: PokemonTeam) -> None:
+    if team.size == 0:
+        print("You cannot save an empty team.")
+        return
+
+    team_name = input("Enter a name for this team: ").strip()
+
+    if not team_name:
+        print("The team name cannot be empty.", end='\n\n')
+        return
+
+    save_team(team_name, team)
+    print(f"{team_name} was saved successfully.", end='\n\n')
 
 def add_to_team(pokemon: Pokemon, team) -> PokemonTeam:
     return team.add_pokemon(pokemon)

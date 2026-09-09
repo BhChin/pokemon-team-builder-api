@@ -1,7 +1,10 @@
 import sys
 from menu_options import *
+from database import initialize_database
 
 def run_program():
+    initialize_database()
+
     team = PokemonTeam(limit = 6)
 
     option_parameters = ['1','2','3','4','5','6']
@@ -23,7 +26,7 @@ def run_program():
         elif option == '3':
             run_option_3(team)
         elif option == '4':
-            pass
+            run_option_4(team)
         elif option == '5':
             sys.exit(0)
 
