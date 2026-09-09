@@ -92,10 +92,7 @@ def save_team(team_name: str, team: PokemonTeam) -> None:
     connection.close()
 
 
-def save_pokemon_if_needed(
-    connection: sqlite3.Connection,
-    pokemon
-) -> None:
+def save_pokemon_if_needed(connection: sqlite3.Connection,pokemon) -> None:
     cursor = connection.execute(
         """
         SELECT pokemon_id
