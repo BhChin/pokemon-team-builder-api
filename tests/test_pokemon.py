@@ -17,10 +17,14 @@ class TestPokemonTeam(unittest.TestCase):
     def test_add_pokemon_returns_true(self):
         team = PokemonTeam()
         pokemon = SamplePokemon("Bulbasaur")
-        team.add_pokemon(pokemon) #type mismatch. should be fine
+        self.assertTrue(team.add_pokemon(pokemon)) #type mismatch. should be fine
+
 
     def test_add_pokemon_increases_size(self):
-        pass
+        team = PokemonTeam()
+        pokemon = SamplePokemon("Bulbasaur")
+        team.add_pokemon(pokemon)
+        self.assertEqual(team.size, 1)
 
     def test_team_has_limits(self):
         pass
