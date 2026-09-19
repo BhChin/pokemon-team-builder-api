@@ -27,7 +27,14 @@ class TestPokemonTeam(unittest.TestCase):
         self.assertEqual(team.size, 1)
 
     def test_team_has_limits(self):
-        pass
+        team = PokemonTeam(limit=2)
+        team.add_pokemon(SamplePokemon("Pikachu"))
+        team.add_pokemon(SamplePokemon("Bulbasaur"))
+
+        result = team.add_pokemon(SamplePokemon("Charmander"))
+
+        self.assertFalse(result)
+        self.assertEqual(team.size, 2)
 
     def test_default_limit_is_six(self):
         pass
