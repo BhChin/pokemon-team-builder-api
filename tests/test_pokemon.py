@@ -37,10 +37,19 @@ class TestPokemonTeam(unittest.TestCase):
         self.assertEqual(team.size, 2)
 
     def test_default_limit_is_six(self):
-        pass
+        team = PokemonTeam()
+        for i in range(6):
+            self.assertTrue(team.add_pokemon(SamplePokemon(f"pokemon-{i}")))
+        self.assertFalse(team.add_pokemon(SamplePokemon("overlimit")))
 
     def test_pokemon_teams_do_not_share_same_lists(self):
-        pass
+        team1 = PokemonTeam()
+        team2 = PokemonTeam()
+        team1.add_pokemon(SamplePokemon("Bulbasaur"))
+
+        self.assertEqual(team1.size, 1)
+        self.assertEqual(team2.size, 0)
+
 
 
 if __name__ == '__main__':
