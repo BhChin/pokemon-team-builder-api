@@ -9,6 +9,9 @@ class PokemonTeam:
     limit: int = 6
     team: List[Pokemon] = field(default_factory=list) # prevents instances of classes share same list
 
+    def __getitem__(self, index: int) -> Pokemon:
+        return self.team[index]
+
     @property
     def size(self) -> int:
         return len(self.team)
