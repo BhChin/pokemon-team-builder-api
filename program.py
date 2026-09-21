@@ -28,6 +28,8 @@ def run_program():
         elif option == '4':
             run_option_4(team)
         elif option == '5':
+            run_option_5()
+        elif option == '6':
             sys.exit(0)
 
         print_options()
@@ -39,4 +41,8 @@ def print_options() -> None:
           "2. View team",
           "3. Analyze team",
           "4. Save team",
-          "5. Exit", sep='\n', end='\n\n')
+          "5. Load Team",
+          "6. Exit", sep='\n', end='\n\n')
+
+if __name__ == "__main__":
+    run_program()

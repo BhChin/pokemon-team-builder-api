@@ -105,6 +105,9 @@ def run_option_4(team: PokemonTeam) -> None:
     save_team(team_name, team)
     print(f"{team_name} was saved successfully.", end='\n\n')
 
+def run_option_5():
+    pass
+
 def add_to_team(pokemon: Pokemon, team) -> PokemonTeam:
     return team.add_pokemon(pokemon)
 
