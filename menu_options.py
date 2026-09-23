@@ -136,6 +136,38 @@ def run_option_5(team: PokemonTeam) -> PokemonTeam:
     print(f"Loaded team with {loaded_team.size} Pokémon.", end='\n\n')
     return loaded_team
 
+def run_option_6(team: PokemonTeam) -> None:
+    if team.size == 0:
+        print("Your team is empty.", end='\n\n')
+        return
+
+    print("\n================================")
+    print(" EDIT TEAM")
+    print("================================\n")
+
+    for number, pokemon in enumerate(team.team, start=1):
+        print(f"{number}. {pokemon.name.title()}")
+    print()
+
+    choice = input("Enter the number of the Pokémon to remove (or 0 to cancel): ").strip()
+
+    if choice == '0':
+        print("No changes made.", end='\n\n')
+        return
+
+    if not choice.isdigit():
+        print("That is not a valid number.", end='\n\n')
+        return
+
+    removed = team.remove_pokemon(int(choice))
+
+    if removed is None:
+        print("That is not a valid Pokémon number.", end='\n\n')
+        return
+
+    print(f"{removed.name.title()} was removed from your team.", end='\n\n')
+    print(f"Team size: {team.size}/{team.limit}", end='\n\n')
+
 def add_to_team(pokemon: Pokemon, team) -> PokemonTeam:
     return team.add_pokemon(pokemon)
 

@@ -5,11 +5,7 @@ from team import PokemonTeam
 
 DATABASE = 'pokemon.db'
 
-def initialize_database() -> None:
-
-    connection = sqlite3.connect(DATABASE)
-    connection.execute("PRAGMA foreign_keys = ON;")
-
+def create_pokemon_table(connection: sqlite3.Connection) -> None:
     connection.execute(
         '''
         CREATE TABLE IF NOT EXISTS pokemon(
@@ -29,6 +25,7 @@ def initialize_database() -> None:
         '''
     )
 
+def create_teams_table(connection: sqlite3.Connection) -> None:
     connection.execute(
         '''
         CREATE TABLE IF NOT EXISTS teams(
@@ -38,6 +35,7 @@ def initialize_database() -> None:
         '''
     )
 
+def create_team_member_table(connection: sqlite3.Connection) -> None:
     connection.execute(
         '''
         CREATE TABLE IF NOT EXISTS team_members(
@@ -46,13 +44,21 @@ def initialize_database() -> None:
             position INTEGER NOT NULL,
             
             PRIMARY KEY (team_id, position),
-            
-            FOREIGN KEY(team_id) REFERENCES teams(team_id),
-            
-            FOREIGN KEY(pokemon_id) REFERENCES pokemon(pokemon_id)
+            FOREIGN KEY (team_id) REFERENCES teams(team_id),
+            FOREIGN KEY (pokemon_id) REFERENCES pokemon(pokemon_id)
         ) STRICT;
         '''
     )
+
+
+def initialize_database() -> None:
+
+    connection = sqlite3.connect(DATABASE)
+    connection.execute("PRAGMA foreign_keys = ON;")
+
+    create_pokemon_table(connection)
+    create_teams_table(connection)
+    create_team_member_table(connection)
 
     connection.commit()
     connection.close()

@@ -7,7 +7,7 @@ def run_program():
 
     team = PokemonTeam(limit = 6)
 
-    option_parameters = ['1','2','3','4','5','6']
+    option_parameters = ['1','2','3','4','5','6','7']
 
     print_options()
     option = input("Select an option: ")
@@ -30,6 +30,8 @@ def run_program():
         elif option == '5':
             team = run_option_5(team)
         elif option == '6':
+            run_option_6(team)
+        elif option == '7':
             sys.exit(0)
 
         print_options()
@@ -41,8 +43,9 @@ def print_options() -> None:
           "2. View team",
           "3. Analyze team",
           "4. Save team",
-          "5. Load Team",
-          "6. Exit", sep='\n', end='\n\n')
+          "5. Load team",
+          "6. Edit team",
+          "7. Exit", sep='\n', end='\n\n')
 
 if __name__ == "__main__":
     run_program()

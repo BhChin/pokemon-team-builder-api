@@ -23,4 +23,8 @@ class PokemonTeam:
         self.team.append(pokemon)
         return True
 
+    def remove_pokemon(self, position: int) -> Pokemon | None:
+        if position < 1 or position > self.size:
+            return None
+        return self.team.pop(position - 1)
 
