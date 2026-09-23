@@ -1,7 +1,7 @@
 from team import PokemonTeam
 from pokemon import Pokemon
 from pokeapi import search_by_name, get_stats
-from database import save_team
+from database import save_team, load_team, get_team_names
 
 TYPE_WEAKNESSES = {
     "normal": ["fighting"],
@@ -105,8 +105,36 @@ def run_option_4(team: PokemonTeam) -> None:
     save_team(team_name, team)
     print(f"{team_name} was saved successfully.", end='\n\n')
 
-def run_option_5():
-    pass
+def run_option_5(team: PokemonTeam) -> PokemonTeam:
+    teams = get_team_names()
+
+    if not teams:
+        print("There are no saved teams to load.", end='\n\n')
+        return team
+
+    print("\n================================")
+    print(" SAVED TEAMS")
+    print("================================\n")
+
+    for team_id, name in teams:
+        print(f"{team_id}. {name}")
+    print()
+
+    choice = input("Enter the number of the team to load: ").strip()
+    matching_id = next((tid for tid, _ in teams if str(tid) == choice), None)
+
+    if matching_id is None:
+        print("That is not a valid team number.", end='\n\n')
+        return team
+
+    loaded_team = load_team(matching_id)
+
+    if loaded_team is None:
+        print("That team could not be found.", end='\n\n')
+        return team
+
+    print(f"Loaded team with {loaded_team.size} Pokémon.", end='\n\n')
+    return loaded_team
 
 def add_to_team(pokemon: Pokemon, team) -> PokemonTeam:
     return team.add_pokemon(pokemon)

@@ -28,7 +28,7 @@ def run_program():
         elif option == '4':
             run_option_4(team)
         elif option == '5':
-            run_option_5()
+            team = run_option_5(team)
         elif option == '6':
             sys.exit(0)
 
