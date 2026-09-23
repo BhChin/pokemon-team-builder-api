@@ -1,4 +1,6 @@
 import sqlite3
+
+from pokemon import Pokemon
 from team import PokemonTeam
 
 DATABASE = 'pokemon.db'
@@ -146,3 +148,67 @@ def save_pokemon_if_needed(connection: sqlite3.Connection,pokemon) -> None:
             pokemon.base_stats["speed"]
         )
     )
+
+def get_team_names() -> list[tuple[int, str]]:
+    connection = sqlite3.connect(DATABASE)
+    cursor = connection.execute(
+        """
+        SELECT team_id, name
+        FROM teams
+        ORDER BY team_id;
+        """
+    )
+    teams = cursor.fetchall()
+    connection.close()
+    return teams
+
+
+def load_team(team_id: int) -> PokemonTeam | None:
+    connection = sqlite3.connect(DATABASE)
+    connection.execute("PRAGMA foreign_keys = ON;")
+
+    cursor = connection.execute(
+        """
+        SELECT p.pokemon_id, p.name, p.primary_type, p.secondary_type,
+               p.height, p.weight, p.hp, p.attack, p.defense,
+               p.special_attack, p.special_defense, p.speed
+        FROM team_members tm
+        JOIN pokemon p ON p.pokemon_id = tm.pokemon_id
+        WHERE tm.team_id = ?
+        ORDER BY tm.position;
+        """,
+        (team_id,)
+    )
+    rows = cursor.fetchall()
+    connection.close()
+
+    if not rows:
+        return None
+
+    loaded_team = PokemonTeam(limit=6)
+    for (pokemon_id, name, primary_type, secondary_type,
+         height, weight, hp, attack, defense,
+         special_attack, special_defense, speed) in rows:
+
+        types = [primary_type]
+        if secondary_type is not None:
+            types.append(secondary_type)
+
+        pokemon = Pokemon(
+            name=name,
+            id=pokemon_id,
+            types=types,
+            height=height,
+            weight=weight,
+            base_stats={
+                "hp": hp,
+                "attack": attack,
+                "defense": defense,
+                "special-attack": special_attack,
+                "special-defense": special_defense,
+                "speed": speed,
+            },
+        )
+        loaded_team.add_pokemon(pokemon)
+
+    return loaded_team
