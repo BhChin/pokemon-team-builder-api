@@ -25,6 +25,8 @@ TYPE_WEAKNESSES = {
 }
 
 def run_option_1(team: PokemonTeam) -> None:
+    """Asks the user for a Pokémon name, looks up its info,
+     and lets them decide if they want to add it to their team."""
     pokemon_name = input("Enter a Pokemon Name: ")
     print()
     data = search_by_name(pokemon_name)
@@ -46,6 +48,7 @@ def run_option_1(team: PokemonTeam) -> None:
                 print("Your team is already full!", end='\n\n')
 
 def run_option_2(team: PokemonTeam) -> None:
+    """Prints out the current lineup, showing each Pokémon's types and weight."""
     if team.size == 0:
         print("\nYour team is empty.")
         return
@@ -72,6 +75,7 @@ def run_option_2(team: PokemonTeam) -> None:
 
 
 def run_option_3(team: PokemonTeam) -> None:
+    """Gives a quick rundown of the team's strengths and weaknesses, highlighting shared type vulnerabilities and who has the best stats."""
     if team.size == 0:
         print("Your team is empty.")
         return
@@ -92,6 +96,7 @@ def run_option_3(team: PokemonTeam) -> None:
     print("\n-------------------------------------", end='\n\n')
 
 def run_option_4(team: PokemonTeam) -> None:
+    """Lets the user pick a name and saves their current team to the database."""
     if team.size == 0:
         print("You cannot save an empty team.")
         return
@@ -106,6 +111,7 @@ def run_option_4(team: PokemonTeam) -> None:
     print(f"{team_name} was saved successfully.", end='\n\n')
 
 def run_option_5(team: PokemonTeam) -> PokemonTeam:
+    """Shows a list of previously saved teams and lets the user pick one to load up."""
     teams = get_team_names()
 
     if not teams:
@@ -116,18 +122,17 @@ def run_option_5(team: PokemonTeam) -> PokemonTeam:
     print(" SAVED TEAMS")
     print("================================\n")
 
-    for team_id, name in teams:
-        print(f"{team_id}. {name}")
+    for num, name in enumerate(teams, start=1):
+        print(f"{num}. {name}")
     print()
 
-    choice = input("Enter the number of the team to load: ").strip()
-    matching_id = next((tid for tid, _ in teams if str(tid) == choice), None)
+    choice = input("Enter the name of the team to load: ").strip()
 
-    if matching_id is None:
-        print("That is not a valid team number.", end='\n\n')
+    if choice not in teams:
+        print("That is not a valid name.", end='\n\n')
         return team
 
-    loaded_team = load_team(matching_id)
+    loaded_team = load_team(choice)
 
     if loaded_team is None:
         print("That team could not be found.", end='\n\n')
@@ -137,6 +142,7 @@ def run_option_5(team: PokemonTeam) -> PokemonTeam:
     return loaded_team
 
 def run_option_6(team: PokemonTeam) -> None:
+    """Lets the user pick a Pokémon from their current lineup and removes it."""
     if team.size == 0:
         print("Your team is empty.", end='\n\n')
         return
@@ -168,10 +174,12 @@ def run_option_6(team: PokemonTeam) -> None:
     print(f"{removed.name.title()} was removed from your team.", end='\n\n')
     print(f"Team size: {team.size}/{team.limit}", end='\n\n')
 
-def add_to_team(pokemon: Pokemon, team) -> PokemonTeam:
+def add_to_team(pokemon: Pokemon, team: PokemonTeam) -> bool:
+    """Tries to add a new Pokémon to the team, returning whether it actually worked."""
     return team.add_pokemon(pokemon)
 
 def create_pokemon(stats: dict) -> Pokemon:
+    """Takes a dictionary of raw stats and turns it into a proper Pokémon object."""
     return Pokemon(
         name=stats["name"],
         id=stats["id"],
@@ -182,6 +190,7 @@ def create_pokemon(stats: dict) -> Pokemon:
     )
 
 def print_shared_weaknesses(team: PokemonTeam) -> None:
+    """Figures out if multiple Pokémon on the team share the same type weaknesses and prints them out."""
     weakness_groups = {}
 
     for pokemon in team.team:
@@ -213,6 +222,7 @@ def print_shared_weaknesses(team: PokemonTeam) -> None:
         print(f"  {formatted_names} are weak to {weakness.title()}.\n")
 
 def format_names(names: list[str]) -> str:
+    """Takes a list of names and turns them into a nice, readable sentence with commas and an 'and' at the end."""
     if len(names) == 1:
         return names[0]
 
@@ -222,6 +232,7 @@ def format_names(names: list[str]) -> str:
     return f"{', '.join(names[:-1])}, and {names[-1]}"
 
 def print_available_types(team: PokemonTeam) -> None:
+    """Looks at the whole team and prints out a list of all the different types you currently have."""
     available_types = set()
 
     for pokemon in team.team:
@@ -233,14 +244,16 @@ def print_available_types(team: PokemonTeam) -> None:
         print(f"- {pokemon_type.title()}")
 
 def print_stats(stats: dict) -> None:
-    print(f"Name: {stats["name"]}")
-    print(f"Pokedex ID: {stats["id"]}")
+    """Prints out a quick summary of a Pokémon's basic info, like its height and weight."""
+    print(f"Name: {stats['name']}")
+    print(f"Pokedex ID: {stats['id']}")
     print(f"Type: ")
-    print(f"Height: {stats["height"]} ft")
-    print(f"Weight: {stats["weight"]} lbs", end='\n\n')
+    print(f"Height: {stats['height']} ft")
+    print(f"Weight: {stats['weight']} lbs", end='\n\n')
 
 
 def print_highest_stats(team: PokemonTeam) -> None:
+    """Finds out which Pokémon on the team are the best in specific categories, like the highest HP or fastest speed."""
     categories = {
         "Highest HP": "hp",
         "Highest Attack": "attack",

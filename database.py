@@ -5,7 +5,9 @@ from team import PokemonTeam
 
 DATABASE = 'pokemon.db'
 
+
 def create_pokemon_table(connection: sqlite3.Connection) -> None:
+    """Sets up the table to store all the core stats for individual Pokémon."""
     connection.execute(
         '''
         CREATE TABLE IF NOT EXISTS pokemon(
@@ -25,26 +27,29 @@ def create_pokemon_table(connection: sqlite3.Connection) -> None:
         '''
     )
 
+
 def create_teams_table(connection: sqlite3.Connection) -> None:
+    """Sets up the teams table, using the team name as the unique identifier."""
     connection.execute(
         '''
         CREATE TABLE IF NOT EXISTS teams(
-            team_id INTEGER PRIMARY KEY,
-            name TEXT NOT NULL
-        ) STRICT;
+            name TEXT PRIMARY KEY   
+        ) STRICT; 
         '''
     )
 
+
 def create_team_member_table(connection: sqlite3.Connection) -> None:
+    """Creates a table that links specific Pokémon to their respective teams based on the team's name."""
     connection.execute(
         '''
         CREATE TABLE IF NOT EXISTS team_members(
-            team_id INTEGER NOT NULL,
+            name TEXT NOT NULL,
             pokemon_id INTEGER NOT NULL,
             position INTEGER NOT NULL,
-            
-            PRIMARY KEY (team_id, position),
-            FOREIGN KEY (team_id) REFERENCES teams(team_id),
+
+            PRIMARY KEY (name, position),
+            FOREIGN KEY (name) REFERENCES teams(name),
             FOREIGN KEY (pokemon_id) REFERENCES pokemon(pokemon_id)
         ) STRICT;
         '''
@@ -52,7 +57,7 @@ def create_team_member_table(connection: sqlite3.Connection) -> None:
 
 
 def initialize_database() -> None:
-
+    """Connects to the database and ensures all our necessary tables are created and ready to go."""
     connection = sqlite3.connect(DATABASE)
     connection.execute("PRAGMA foreign_keys = ON;")
 
@@ -63,11 +68,13 @@ def initialize_database() -> None:
     connection.commit()
     connection.close()
 
+
 def save_team(team_name: str, team: PokemonTeam) -> None:
+    """Saves a new team to the database using its unique name, and adds all of its Pokémon to the roster."""
     connection = sqlite3.connect(DATABASE)
     connection.execute("PRAGMA foreign_keys = ON;")
 
-    team_cursor = connection.execute(
+    connection.execute(
         """
         INSERT INTO teams(name)
         VALUES (?);
@@ -75,22 +82,20 @@ def save_team(team_name: str, team: PokemonTeam) -> None:
         (team_name,)
     )
 
-    team_id = team_cursor.lastrowid
-
     for position, pokemon in enumerate(team.team, start=1):
         save_pokemon_if_needed(connection, pokemon)
 
         connection.execute(
             """
             INSERT INTO team_members(
-                team_id,
+                name,
                 pokemon_id,
                 position
             )
             VALUES (?, ?, ?);
             """,
             (
-                team_id,
+                team_name,
                 pokemon.id,
                 position
             )
@@ -100,7 +105,8 @@ def save_team(team_name: str, team: PokemonTeam) -> None:
     connection.close()
 
 
-def save_pokemon_if_needed(connection: sqlite3.Connection,pokemon) -> None:
+def save_pokemon_if_needed(connection: sqlite3.Connection, pokemon) -> None:
+    """Checks if a Pokémon is already saved in the database, and if not, adds it so we have its stats for later."""
     cursor = connection.execute(
         """
         SELECT pokemon_id
@@ -155,21 +161,24 @@ def save_pokemon_if_needed(connection: sqlite3.Connection,pokemon) -> None:
         )
     )
 
-def get_team_names() -> list[tuple[int, str]]:
+
+def get_team_names() -> list[str]:
+    """Fetches a list of all the team names currently saved in the database."""
     connection = sqlite3.connect(DATABASE)
     cursor = connection.execute(
         """
-        SELECT team_id, name
+        SELECT name
         FROM teams
-        ORDER BY team_id;
+        ORDER BY name;
         """
     )
-    teams = cursor.fetchall()
+    teams = [row[0] for row in cursor.fetchall()]
     connection.close()
     return teams
 
 
-def load_team(team_id: int) -> PokemonTeam | None:
+def load_team(team_name: str) -> PokemonTeam | None:
+    """Looks up a team by its name and rebuilds it with all its Pokémon."""
     connection = sqlite3.connect(DATABASE)
     connection.execute("PRAGMA foreign_keys = ON;")
 
@@ -180,10 +189,10 @@ def load_team(team_id: int) -> PokemonTeam | None:
                p.special_attack, p.special_defense, p.speed
         FROM team_members tm
         JOIN pokemon p ON p.pokemon_id = tm.pokemon_id
-        WHERE tm.team_id = ?
+        WHERE tm.name = ?
         ORDER BY tm.position;
         """,
-        (team_id,)
+        (team_name,)
     )
     rows = cursor.fetchall()
     connection.close()
