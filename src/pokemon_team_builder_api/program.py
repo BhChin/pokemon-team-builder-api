@@ -1,6 +1,6 @@
 import sys
-from menu_options import *
-from database import initialize_database
+from pokemon_team_builder_api.menu_options import *
+from pokemon_team_builder_api.database import initialize_database
 
 def run_program():
     initialize_database()

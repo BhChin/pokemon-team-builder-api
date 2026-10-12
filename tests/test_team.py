@@ -1,7 +1,6 @@
 import unittest
 
-from pokemon import Pokemon
-from team import PokemonTeam
+from pokemon_team_builder_api.team import PokemonTeam
 
 
 class SamplePokemon():

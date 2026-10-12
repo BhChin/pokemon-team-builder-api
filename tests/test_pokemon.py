@@ -1,6 +1,5 @@
 import unittest
 
-from pokemon import Pokemon
 
 class TestPokemon(unittest.TestCase):
     def test_something(self):

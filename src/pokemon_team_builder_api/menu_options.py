@@ -1,7 +1,7 @@
 from team import PokemonTeam
 from pokemon import Pokemon
 from pokeapi import search_by_name, get_stats
-from database import save_team, load_team, get_team_names
+from pokemon_team_builder_api.database import save_team, load_team, get_team_names
 
 TYPE_WEAKNESSES = {
     "normal": ["fighting"],

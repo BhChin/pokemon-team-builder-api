@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from typing import List
 
-from pokemon import Pokemon
+from pokemon_team_builder_api.pokemon import Pokemon
 
 
 @dataclass
