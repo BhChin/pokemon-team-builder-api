@@ -47,5 +47,11 @@ def print_options() -> None:
           "6. Edit team",
           "7. Exit", sep='\n', end='\n\n')
 
+def print_title() -> None:
+
+    print("\n================================")
+    print(" POKÉMON TEAM BUILDER")
+    print("================================\n")
+
 if __name__ == "__main__":
     run_program()
