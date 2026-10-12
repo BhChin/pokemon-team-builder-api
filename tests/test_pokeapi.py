@@ -42,5 +42,63 @@ class TestPokeAPI(unittest.TestCase):
             timeout=10,
         )
 
+    @patch("pokemon_team_builder_api.pokeapi.requests.get")
+    def test_search_by_name_returns_none_for_404(self, mock_get):
+        response = Mock()
+        response.status_code = 404
+        mock_get.return_value = response
+
+        result = pokeapi.search_by_name("missingno")
+
+        self.assertIsNone(result)
+        response.raise_for_status.assert_not_called()
+
+    @patch("pokemon_team_builder_api.pokeapi.requests.get")
+    def test_search_by_name_returns_none_for_http_error(self, mock_get):
+        response = Mock()
+        response.status_code = 500
+        response.raise_for_status.side_effect = requests.exceptions.HTTPError(
+            "server error"
+        )
+        mock_get.return_value = response
+
+        result = pokeapi.search_by_name("pikachu")
+
+        self.assertIsNone(result)
+
+    @patch("pokemon_team_builder_api.pokeapi.requests.get")
+    def test_search_by_name_returns_none_for_timeout(self, mock_get):
+        mock_get.side_effect = requests.exceptions.Timeout("request timed out")
+
+        result = pokeapi.search_by_name("pikachu")
+
+        self.assertIsNone(result)
+
+    def test_get_stats_returns_expected_values_and_conversions(self):
+        data = {
+            "name": "pikachu",
+            "id": 25,
+            "types": [
+                {"type": {"name": "electric"}},
+            ],
+            "height": 4,
+            "weight": 60,
+            "stats": [
+                {"stat": {"name": "hp"}, "base_stat": 35},
+                {"stat": {"name": "speed"}, "base_stat": 90},
+            ],
+        }
+
+        result = pokeapi.get_stats(data)
+
+        self.assertEqual(result, {
+            "name": "Pikachu",
+            "id": 25,
+            "types": ["electric"],
+            "height": 0.4,
+            "weight": 6.0,
+            "base_stats": {"hp": 35, "speed": 90},
+        })
+
 
 
