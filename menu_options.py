@@ -52,7 +52,7 @@ def run_option_1(team: PokemonTeam) -> None:
 def run_option_2(team: PokemonTeam) -> None:
     """Prints out the current lineup, showing each Pokémon's types and weight."""
     if team.size == 0:
-        print("\nYour team is empty.")
+        print("Your team is empty.\n")
         return
 
     print("\n================================")
@@ -79,7 +79,7 @@ def run_option_2(team: PokemonTeam) -> None:
 def run_option_3(team: PokemonTeam) -> None:
     """Gives a quick rundown of the team's strengths and weaknesses, highlighting shared type vulnerabilities and who has the best stats."""
     if team.size == 0:
-        print("Your team is empty.")
+        print("Your team is empty.\n")
         return
 
     print("\n================================")
