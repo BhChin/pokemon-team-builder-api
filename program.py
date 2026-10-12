@@ -9,6 +9,8 @@ def run_program():
 
     option_parameters = ['1','2','3','4','5','6','7']
 
+
+    print_title()
     print_options()
     option = input("Select an option: ")
     print()
@@ -48,9 +50,8 @@ def print_options() -> None:
           "7. Exit", sep='\n', end='\n\n')
 
 def print_title() -> None:
-
     print("\n================================")
-    print(" POKÉMON TEAM BUILDER")
+    print("      POKÉMON TEAM BUILDER")
     print("================================\n")
 
 if __name__ == "__main__":

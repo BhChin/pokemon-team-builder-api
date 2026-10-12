@@ -46,6 +46,8 @@ def run_option_1(team: PokemonTeam) -> None:
                 print(f"Team size: {team.size}/{team.limit}", end='\n\n')
             else:
                 print("Your team is already full!", end='\n\n')
+        else:
+            print(f"{pokemon_name} was not added to your team.", end='\n\n')
 
 def run_option_2(team: PokemonTeam) -> None:
     """Prints out the current lineup, showing each Pokémon's types and weight."""
